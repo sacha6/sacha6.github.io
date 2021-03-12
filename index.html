@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+
+    <link href="style.css" rel="stylesheet">
+
+    <title>Canvas pixel manipulation</title>
+</head>
+
+<body>
+    <input type="file" name="img" size="65" id="uploadimage" onchange="uploadImage();" />
+    <div style="border:1px,solid,red" width="100%">
+        <canvas id="canvas" width="800" height="600"></canvas>
+    </div>
+
+
+
+    <div>
+        <input class="form-check-input" type="radio" id="original" name="color" value="original" checked>
+        <label class="form-check-label" for="original">Original</label>
+    </div>
+    <div>
+        <input type="radio" id="grayscale" name="color" value="grayscale">
+        <label for="grayscale">Grayscale</label>
+    </div>
+    <div>
+        <input type="radio" id="inverted" name="color" value="inverted">
+        <label for="inverted">Inverted</label>
+    </div>
+    <div>
+        <input type="radio" id="sepia" name="color" value="sepia">
+        <label for="sepia">Sepia</label>
+    </div>
+
+    <br>
+
+    <div>
+        <input type="radio" id="original" name="process" value="original" checked>
+        <label for="orignal">Original</label>
+    </div>
+    <div>
+        <input type="radio" id="canal" name="process" value="canal">
+        <label for="canal+">Canal +</label>
+    </div>
+    <div>
+        <input type="radio" id="grille" name="process" value="grille">
+        <label for="grid">Grid</label>
+    </div>
+
+    <br>
+
+    <div>
+        Luminosité <input type="range" min="-255" max="255" value="0" class="slider" id="brightness">
+    </div>
+    <div>
+        Contrast <input type="range" min="-255" max="255" value="0" class="slider" id="contrast">
+    </div>
+    <input type="button" id="reset" value="reset">
+
+
+    <br>
+    <a id="download" download="myImage.jpg" href="" onclick="downloadImage(this);">Download to myImage.jpg</a>
+    <script src="color-manipulation.js"></script>
+</body>
+
+</html>

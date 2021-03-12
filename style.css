@@ -1,0 +1,18 @@
+/* html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0px;
+    border: 0;
+    overflow: hidden; 
+    display: block;  
+  } */
+/* 
+  canvas { 
+    height: 50vh; 
+    width: 50vw; 
+    display: block;
+  } */
+#canvas{
+  border: solid 1px blue;  
+  width: 100%;
+}
