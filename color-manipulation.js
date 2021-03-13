@@ -51,13 +51,56 @@ const invert = function (data) {
     }
 };
 
-// fonction qui calcule une image dans les tons gris
+// fonction qui calcule une image dans les tons gris en faisant une simple moyenne des couleurs
 const grayscale = function (data) {
     for (var i = 0; i < data.length; i += 4) {
-        var avg = (data[i] + data[i + 1] + data[i + 2]) / 3;
+        let red = data[i], green = data[i + 1], blue = data[i + 2];
+        let avg = Math.min(Math.round(0.2126 * red + 0.7152 * green + 0.0722 * blue), 255);
         data[i] = avg; // red
         data[i + 1] = avg; // green
         data[i + 2] = avg; // blue
+    }
+};
+const blackWhite = function (data) {
+    
+    for (var i = 0; i < data.length; i += 4) {
+        let avg = (data[i] + data[i + 1] + data[i + 2]) / 3;
+        let val = avg < 128 ? 0 : 255;
+        data[i] = data[i + 1] = data[i + 2] = val;
+      }
+    return data;
+  }
+  
+// fonction qui calcule une image dans les tons gris
+const pixel = function (data, width, height) {
+    const size = 8;
+    width *= 4;
+    // on calcule la moyenne du bloc
+    
+    for (var j = 0; j < height; j += size) {
+        for (var i = 0; i < width; i += size * 4) {
+            // on calcule la moyenne des couleurs du bloc
+            var avg_R = 0;
+            var avg_V = 0;
+            var avg_B = 0;
+            for (var l = j; l < j + size; l++) {
+                for (var k = i; k < i + size * 4; k+=4) {
+                    avg_R += data[l * width + k];
+                    avg_V += data[l * width + k + 1];
+                    avg_B += data[l * width + k + 2];
+                }
+            }
+            avg_R = avg_R / (size * size);
+            avg_V = avg_V / (size * size);
+            avg_B = avg_B / (size * size);
+            for (var l = j; l < j + size; l++) {
+                for (var k = i; k < i + size * 4; k+=4) {
+                    data[l * width + k] = avg_R;
+                    data[l * width + k + 1] = avg_V;
+                    data[l * width + k + 2] = avg_B;
+                }
+            }
+        }
     }
 };
 
@@ -189,6 +232,8 @@ for (const input of colorInputs) {
                 filter = grayscale; break;
             case "sepia":
                 filter = sepia; break;
+            case "pixel":
+                filter = pixel;break;
             default:
                 filter = undefined;
         }
@@ -236,7 +281,7 @@ const processImage = function () {
     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
     const data = imageData.data;
     if (filter) {
-        filter(data)
+        filter(data,  imageData.width, imageData.height)
     }
     if (process) {
         process(data, imageData.width, imageData.height)
