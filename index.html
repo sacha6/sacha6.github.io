@@ -10,63 +10,91 @@
 </head>
 
 <body>
-    <input type="file" name="img" size="65" id="uploadimage" onchange="uploadImage();" />
-    <div style="border:1px,solid,red" width="100%">
-        <canvas id="canvas" width="800" height="600"></canvas>
-    </div>
+
+    <div class="container flex-direction">
+        <div id="div2">
+
+            <canvas id="canvas"></canvas>
+        </div>
+        <fieldset class="container  flex-action">
+            <legend>Filtres Statiques</legend>
+            <canvas class="filtres" id="none" name="color"></canvas>
+            <canvas class="filtres" id="grayscale" name="color"></canvas>
+            <canvas class="filtres" id="inverted" name="color"></canvas>
+            <canvas class="filtres" id="sepia" name="color"></canvas>
+            <canvas class="filtres" id="pixel" name="color"></canvas>
+        </fieldset>
 
 
+        <!-- <fieldset>
+                <legend>Filtres Statiques</legend>
+                <div>
+                    <input class="form-check-input" type="radio" id="original" name="color" value="original" checked>
+                    <label class="form-check-label" for="original">Original</label>
+                </div>
+                <div>
+                    <input type="radio" id="grayscale" name="color" value="grayscale">
+                    <label for="grayscale">Grayscale</label>
+                </div>
+                <div>
+                    <input type="radio" id="inverted" name="color" value="inverted">
+                    <label for="inverted">Inverted</label>
+                </div>
+                <div>
+                    <input type="radio" id="sepia" name="color" value="sepia">
+                    <label for="sepia">Sepia</label>
+                </div>
+                <div>
+                    <input type="radio" id="pixel" name="color" value="pixel">
+                    <label for="pixel">Pixel</label>
+                </div>
+            </fieldset> -->
+        <fieldset class="container  flex-action">
+            <legend>Filtres Animés</legend>
+            <canvas class="filtres" id="original" name="process"></canvas>
+            <canvas class="filtres" id="canal" name="process"></canvas>
+            <canvas class="filtres" id="grille" name="process"></canvas>
 
-    <div>
-        <input class="form-check-input" type="radio" id="original" name="color" value="original" checked>
-        <label class="form-check-label" for="original">Original</label>
-    </div>
-    <div>
-        <input type="radio" id="grayscale" name="color" value="grayscale">
-        <label for="grayscale">Grayscale</label>
-    </div>
-    <div>
-        <input type="radio" id="inverted" name="color" value="inverted">
-        <label for="inverted">Inverted</label>
-    </div>
-    <div>
-        <input type="radio" id="sepia" name="color" value="sepia">
-        <label for="sepia">Sepia</label>
-    </div>
-    <div>
-        <input type="radio" id="pixel" name="color" value="pixel">
-        <label for="pixel">Pixel</label>
-    </div>
+            <!-- <div>
+                    <input type="radio" id="original" name="process" value="original" checked>
+                    <label for="orignal">Original</label>
+                </div>
+                <div>
+                    <input type="radio" id="canal" name="process" value="canal">
+                    <label for="canal+">Canal +</label>
+                </div>
+                <div>
+                    <input type="radio" id="grille" name="process" value="grille">
+                    <label for="grid">Grid</label>
+                </div> -->
+        </fieldset>
 
-    <br>
+        <fieldset>
+            <legend>Contrôles </legend>
+            <div>
+                Luminosité <input type="range" min="-255" max="255" value="0" class="slider" id="brightness">
+            </div>
+            <div>
+                Contrast <input type="range" min="-255" max="255" value="0" class="slider" id="contrast">
+            </div>
 
-    <div>
-        <input type="radio" id="original" name="process" value="original" checked>
-        <label for="orignal">Original</label>
-    </div>
-    <div>
-        <input type="radio" id="canal" name="process" value="canal">
-        <label for="canal+">Canal +</label>
-    </div>
-    <div>
-        <input type="radio" id="grille" name="process" value="grille">
-        <label for="grid">Grid</label>
-    </div>
+        </fieldset>
+        <fieldset>
+            <legend>Actions </legend>
+            <div>
+                <input type="file" name="img" size="65" id="uploadimage" onchange="uploadImage();" />
+            </div>
+            <div>
+                <input type="button" id="reset" value="reset">
+            </div>
+            <div>
+                <input type="button" i id="download" download="myImage.jpg" href="" onclick="downloadImage(this);"
+                    value="Sauver l'image">
+            </div>
+        </fieldset>
+        <script src="color-manipulation.js"></script>
 
-    <br>
-
-    <div>
-        Luminosité <input type="range" min="-255" max="255" value="0" class="slider" id="brightness">
     </div>
-    <div>
-        Contrast <input type="range" min="-255" max="255" value="0" class="slider" id="contrast">
-    </div>
-    <input type="button" id="reset" value="reset">
-
-
-    <br>
-    <a id="download" download="myImage.jpg" href="" onclick="downloadImage(this);">Download to myImage.jpg</a>
-    <script src="color-manipulation.js"></script>
 </body>
 
 </html>

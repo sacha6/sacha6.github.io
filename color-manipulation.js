@@ -24,7 +24,10 @@ const downloadImage = function (el) {
 
 // fonction qui permet d'afficher l'image ajustée à la taille du canvas
 img.onload = function () {
+    canvas.height = img.height;
+    canvas.width = img.width;
     ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, canvas.width, canvas.height);
+    createThumbnail();
 };
 
 // const original = function () {
@@ -62,21 +65,21 @@ const grayscale = function (data) {
     }
 };
 const blackWhite = function (data) {
-    
+
     for (var i = 0; i < data.length; i += 4) {
         let avg = (data[i] + data[i + 1] + data[i + 2]) / 3;
         let val = avg < 128 ? 0 : 255;
         data[i] = data[i + 1] = data[i + 2] = val;
-      }
+    }
     return data;
-  }
-  
+}
+
 // fonction qui calcule une image dans les tons gris
 const pixel = function (data, width, height) {
     const size = 8;
     width *= 4;
     // on calcule la moyenne du bloc
-    
+
     for (var j = 0; j < height; j += size) {
         for (var i = 0; i < width; i += size * 4) {
             // on calcule la moyenne des couleurs du bloc
@@ -84,7 +87,7 @@ const pixel = function (data, width, height) {
             var avg_V = 0;
             var avg_B = 0;
             for (var l = j; l < j + size; l++) {
-                for (var k = i; k < i + size * 4; k+=4) {
+                for (var k = i; k < i + size * 4; k += 4) {
                     avg_R += data[l * width + k];
                     avg_V += data[l * width + k + 1];
                     avg_B += data[l * width + k + 2];
@@ -94,7 +97,7 @@ const pixel = function (data, width, height) {
             avg_V = avg_V / (size * size);
             avg_B = avg_B / (size * size);
             for (var l = j; l < j + size; l++) {
-                for (var k = i; k < i + size * 4; k+=4) {
+                for (var k = i; k < i + size * 4; k += 4) {
                     data[l * width + k] = avg_R;
                     data[l * width + k + 1] = avg_V;
                     data[l * width + k + 2] = avg_B;
@@ -221,11 +224,41 @@ contrastInput.addEventListener("input", function (evt) {
     processImage();
 });
 
-const colorInputs = document.querySelectorAll('[name=color]');
 
+
+
+const createThumbnail = function () {
+    thumbnails = document.querySelectorAll('[name=color],[name=process]');
+
+    for (const actionCanvas of thumbnails) {
+        var actionCtx = actionCanvas.getContext('2d');
+        actionCtx.drawImage(img, 0, 0, img.width, img.height, 0, 0, actionCanvas.width, actionCanvas.height);
+        const imageData = actionCtx.getImageData(0, 0, actionCanvas.width, actionCanvas.height);
+        const data = imageData.data;
+
+        switch (actionCanvas.id) {
+            case "inverted":
+                invert(data, imageData.width, imageData.height); break;
+            case "grayscale":
+                grayscale(data, imageData.width, imageData.height); break;
+            case "sepia":
+                sepia(data, imageData.width, imageData.height); break;
+            case "pixel":
+                pixel(data, imageData.width, imageData.height); break;
+        
+            case "canal":
+                canal(data, imageData.width, imageData.height); break;
+            case "grille":
+                grille(data, imageData.width, imageData.height); break;
+        }
+        actionCtx.putImageData(imageData, 0, 0);
+    }
+}
+
+const colorInputs = document.querySelectorAll('[name=color]');
 for (const input of colorInputs) {
-    input.addEventListener("change", function (evt) {
-        switch (evt.target.value) {
+    input.addEventListener("click", function (evt) {
+        switch (evt.target.id) {
             case "inverted":
                 filter = invert; break;
             case "grayscale":
@@ -233,7 +266,7 @@ for (const input of colorInputs) {
             case "sepia":
                 filter = sepia; break;
             case "pixel":
-                filter = pixel;break;
+                filter = pixel; break;
             default:
                 filter = undefined;
         }
@@ -243,8 +276,8 @@ for (const input of colorInputs) {
 
 const processInputs = document.querySelectorAll('[name=process]');
 for (const input of processInputs) {
-    input.addEventListener("change", function (evt) {
-        switch (evt.target.value) {
+    input.addEventListener("click", function (evt) {
+        switch (evt.target.id) {
             case "canal":
                 process = canal; delay = 100; break;
             case "grille":
@@ -281,7 +314,7 @@ const processImage = function () {
     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
     const data = imageData.data;
     if (filter) {
-        filter(data,  imageData.width, imageData.height)
+        filter(data, imageData.width, imageData.height)
     }
     if (process) {
         process(data, imageData.width, imageData.height)
