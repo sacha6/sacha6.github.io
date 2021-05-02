@@ -1,14 +1,12 @@
 var img = new Image();
 img.crossOrigin = 'Anonymous';
 img.src = 'https://upload.wikimedia.org/wikipedia/commons/4/41/Siberischer_tiger_de_edit02.jpg';
-// img.src = 'file:///test.png';
 
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
 
-// fonction téléversement de l'image
+// fonction chargement de l'image
 const uploadImage = function () {
-    console.log("hello");
     f = document.getElementById("uploadimage").files[0];
     url = window.URL || window.webkitURL;
     src = url.createObjectURL(f);
@@ -16,23 +14,24 @@ const uploadImage = function () {
     img.src = src;
 }
 
-// fonction  téléchargement de l'image au format jpeg
-const downloadImage = function (el) {
-    var image = canvas.toDataURL("image/jpg");
-    el.href = image;
+const changeImage = function() {
+    document.getElementById("uploadimage").click();
+}
+
+var downloadImage = function(){
+    var link = document.createElement('a');
+    link.download = 'filename.jpeg';
+    link.href = canvas.toDataURL("image/jpg")
+    link.click();
 };
 
-// fonction qui permet d'afficher l'image ajustée à la taille du canvas
+  // fonction qui permet d'afficher l'image ajustée à la taille du canvas
 img.onload = function () {
     canvas.height = img.height;
     canvas.width = img.width;
     ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, canvas.width, canvas.height);
     createThumbnail();
 };
-
-// const original = function () {
-//     ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, canvas.width, canvas.height);
-// };
 
 // fonction qui calcule une image dans les tons sépia
 const sepia = function (data) {
@@ -54,7 +53,8 @@ const invert = function (data) {
     }
 };
 
-// fonction qui calcule une image dans les tons gris en faisant une simple moyenne des couleurs
+// fonction qui calcule une image dans les tons gris suivant 
+// la formule trouvée sur wikipédia : https://fr.wikipedia.org/wiki/Niveau_de_gris
 const grayscale = function (data) {
     for (var i = 0; i < data.length; i += 4) {
         let red = data[i], green = data[i + 1], blue = data[i + 2];
@@ -74,9 +74,9 @@ const blackWhite = function (data) {
     return data;
 }
 
-// fonction qui calcule une image dans les tons gris
+// fonction qui pixelise l'image avec des blocs de 16x16
 const pixel = function (data, width, height) {
-    const size = 8;
+    const size = 16;
     width *= 4;
     // on calcule la moyenne du bloc
 
@@ -151,16 +151,16 @@ const grille = function (data, width, height) {
         }
     }
 
-    melangeTableau(cellOrder);
+    mixTable(cellOrder);
     for (var j = 0; j < height; j += size) {
         for (var i = 0; i < width; i += size * 4) {
-            echangeCellule(data, j * width + i, cellOrder.pop(), size, height, width);
+            switchCell(data, j * width + i, cellOrder.pop(), size, height, width);
         }
     }
 };
 
-// fonctino qui mélange un tableau
-const melangeTableau = function (a) {
+// fonction qui mélange un tableau
+const mixTable = function (a) {
     var j, x, i;
     for (i = a.length - 1; i > 0; i--) {
         j = Math.floor(Math.random() * (i + 1));
@@ -172,7 +172,7 @@ const melangeTableau = function (a) {
 }
 
 // fonction qui échange 2 cellules
-const echangeCellule = function (data, pos1, pos2, size, height, width) {
+const switchCell = function (data, pos1, pos2, size, height, width) {
     for (var j = 0; j < Math.min(size, height); j++) {
         for (var i = 0; i < Math.min(size * 4, width); i++) {
             var s = data[pos1 + j * width + i];
@@ -226,9 +226,9 @@ contrastInput.addEventListener("input", function (evt) {
 
 
 
-
+// création des images réduites dans le menu 
 const createThumbnail = function () {
-    thumbnails = document.querySelectorAll('[name=color],[name=process]');
+    thumbnails = document.querySelectorAll('[name=thumbnail]');
 
     for (const actionCanvas of thumbnails) {
         var actionCtx = actionCanvas.getContext('2d');
@@ -245,7 +245,8 @@ const createThumbnail = function () {
                 sepia(data, imageData.width, imageData.height); break;
             case "pixel":
                 pixel(data, imageData.width, imageData.height); break;
-        
+            case "bw":
+                blackWhite(data, imageData.width, imageData.height); break;        
             case "canal":
                 canal(data, imageData.width, imageData.height); break;
             case "grille":
@@ -267,6 +268,8 @@ for (const input of colorInputs) {
                 filter = sepia; break;
             case "pixel":
                 filter = pixel; break;
+            case "bw":
+                filter = blackWhite; break;
             default:
                 filter = undefined;
         }
@@ -286,16 +289,14 @@ for (const input of processInputs) {
                 process = undefined;
         }
         clearInterval(interval);
+        processImage();
         if (process && delay) {
             interval = setInterval(processImage, delay);
-        } else {
-            processImage();
-        }
+        } 
     });
 }
 
-const resetInput = document.getElementById('reset');
-resetInput.addEventListener("click", function (evt) {
+const reset = function() {
     contrastInput.value = "0";
     contrastVariation = 0;
     brightnessInput.value = "0";
@@ -306,7 +307,7 @@ resetInput.addEventListener("click", function (evt) {
     colorInputs[0].checked = true;
     processInputs[0].checked = true;
     processImage();
-});
+};
 
 
 const processImage = function () {

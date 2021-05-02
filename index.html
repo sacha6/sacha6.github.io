@@ -11,90 +11,54 @@
 
 <body>
 
-    <div class="container flex-direction">
-        <div id="div2">
+    <nav class="main-menu">
+        <input type="file" id="uploadimage" onchange="uploadImage();" />
 
-            <canvas id="canvas"></canvas>
+
+        <div class="scrollbar">
+            <ul class="menu-list">
+                <li><a href="#"><input type="button" id="download" download="myImage.jpg"
+                            onclick="downloadImage(this);"><span class="nav-text">Sauver l'image</span></a></li>
+                <li><a href="#"><input type="button" id="upload-fake" onclick="changeImage(this);"><span
+                            class="nav-text">Changer l'image</span></a></li>
+                <li><a href="#"><input type="button" id="reset-input" onclick="reset();"><span
+                            class="nav-text">Réinitialisation</span></a></li>
+                <li><span class="nav-text">Filtres Fixes</span></li>
+                <li><a href="#" id="none" name="color"><canvas class="filtres" id="none" name="thumbnail"></canvas><span
+                            class="nav-text">Sans filtre</span></a></li>
+                <li><a href="#" id="grayscale" name="color"><canvas class="filtres" id="grayscale"
+                            name="thumbnail"></canvas><span class="nav-text">Niveau de gris</span></a></li>
+                <li><a href="#" id="bw" name="color"><canvas class="filtres" id="bw" name="thumbnail"></canvas><span
+                            class="nav-text">Noir et blanc</span></a></li>
+                <li><a href="#" id="inverted" name="color"><canvas class="filtres" id="inverted"
+                            name="thumbnail"></canvas><span class="nav-text">Inverse</span></a></li>
+                <li><a href="#" id="sepia" name="color"><canvas class="filtres" id="sepia"
+                            name="thumbnail"></canvas><span class="nav-text">Sepia</span></a></li>
+                <li><a href="#" id="pixel" name="color"><canvas class="filtres" id="pixel"
+                            name="thumbnail"></canvas><span class="nav-text">Pixel</span></a></li>
+                <li><span class="nav-text">Filtres Animés</span></li>
+                <li><a href="#" id="original" name="process"><canvas class="filtres" id="original"
+                            name="thumbnail"></canvas><span class="nav-text">Sans filtre</span></a></li>
+                <li><a href="#" id="canal" name="process"><canvas class="filtres" id="canal"
+                            name="thumbnail"></canvas><span class="nav-text">Canal+</span></a></li>
+                <li><a href="#" id="grille" name="process"><canvas class="filtres" id="grille"
+                            name="thumbnail"></canvas><span class="nav-text">Grille</span></a></li>
+                <li>
+                    <div class="nav-slider"><img class="operation" src="brightness.png"> <input type="range" min="-255"
+                            max="255" value="0" class="slider" id="brightness"></div>
+                </li>
+                <li>
+                    <div class="nav-slider"><img class="operation" src="contrast.png"><input type="range" min="-255"
+                            max="255" value="0" class="slider" id="contrast"></div>
+                </li>
+            </ul>
         </div>
-        <fieldset class="container  flex-action">
-            <legend>Filtres Statiques</legend>
-            <canvas class="filtres" id="none" name="color"></canvas>
-            <canvas class="filtres" id="grayscale" name="color"></canvas>
-            <canvas class="filtres" id="inverted" name="color"></canvas>
-            <canvas class="filtres" id="sepia" name="color"></canvas>
-            <canvas class="filtres" id="pixel" name="color"></canvas>
-        </fieldset>
+    </nav>
 
-
-        <!-- <fieldset>
-                <legend>Filtres Statiques</legend>
-                <div>
-                    <input class="form-check-input" type="radio" id="original" name="color" value="original" checked>
-                    <label class="form-check-label" for="original">Original</label>
-                </div>
-                <div>
-                    <input type="radio" id="grayscale" name="color" value="grayscale">
-                    <label for="grayscale">Grayscale</label>
-                </div>
-                <div>
-                    <input type="radio" id="inverted" name="color" value="inverted">
-                    <label for="inverted">Inverted</label>
-                </div>
-                <div>
-                    <input type="radio" id="sepia" name="color" value="sepia">
-                    <label for="sepia">Sepia</label>
-                </div>
-                <div>
-                    <input type="radio" id="pixel" name="color" value="pixel">
-                    <label for="pixel">Pixel</label>
-                </div>
-            </fieldset> -->
-        <fieldset class="container  flex-action">
-            <legend>Filtres Animés</legend>
-            <canvas class="filtres" id="original" name="process"></canvas>
-            <canvas class="filtres" id="canal" name="process"></canvas>
-            <canvas class="filtres" id="grille" name="process"></canvas>
-
-            <!-- <div>
-                    <input type="radio" id="original" name="process" value="original" checked>
-                    <label for="orignal">Original</label>
-                </div>
-                <div>
-                    <input type="radio" id="canal" name="process" value="canal">
-                    <label for="canal+">Canal +</label>
-                </div>
-                <div>
-                    <input type="radio" id="grille" name="process" value="grille">
-                    <label for="grid">Grid</label>
-                </div> -->
-        </fieldset>
-
-        <fieldset>
-            <legend>Contrôles </legend>
-            <div>
-                Luminosité <input type="range" min="-255" max="255" value="0" class="slider" id="brightness">
-            </div>
-            <div>
-                Contrast <input type="range" min="-255" max="255" value="0" class="slider" id="contrast">
-            </div>
-
-        </fieldset>
-        <fieldset>
-            <legend>Actions </legend>
-            <div>
-                <input type="file" name="img" size="65" id="uploadimage" onchange="uploadImage();" />
-            </div>
-            <div>
-                <input type="button" id="reset" value="reset">
-            </div>
-            <div>
-                <input type="button" i id="download" download="myImage.jpg" href="" onclick="downloadImage(this);"
-                    value="Sauver l'image">
-            </div>
-        </fieldset>
-        <script src="color-manipulation.js"></script>
-
+    <div class="container flex-direction">
+        <canvas id="canvas"></canvas>
     </div>
 </body>
+<script src="color-manipulation.js"></script>
 
 </html>
